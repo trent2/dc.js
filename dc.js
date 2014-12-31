@@ -1902,6 +1902,7 @@ dc.colorMixin = function (_chart) {
         var newDomain = [d3.min(_chart.data(), _chart.colorAccessor()),
                          d3.max(_chart.data(), _chart.colorAccessor())];
         _colors.domain(newDomain);
+        return _chart;
     };
 
     /**
@@ -1952,6 +1953,15 @@ dc.coordinateGridMixin = function (_chart) {
     function zoomHandler () {
         _refocused = true;
         if (_zoomOutRestrict) {
+            var zxr = _zoom.x().range();
+            var zsc = _zoom.scale();
+            var zxt = _zoom.translate();
+
+            zxt[0] = Math.min(Math.max(zxt[0], -(zxr[1]*zsc - zxr[1] + 1)), 0);
+            _zoom.translate([zxt[0],zxt[1]]);
+            _zoom.scale(Math.max(1, _zoom.scale()));
+            _chart.x().domain(_zoom.x().domain());
+
             _chart.x().domain(constrainRange(_chart.x().domain(), _xOriginalDomain));
             if (_rangeChart) {
                 _chart.x().domain(constrainRange(_chart.x().domain(), _rangeChart.x().domain()));
@@ -7208,7 +7218,10 @@ dc.legend = function () {
         _g = _parent.svg().append('g')
             .attr('class', 'dc-legend')
             .attr('transform', 'translate(' + _x + ',' + _y + ')');
-        var legendables = _parent.legendables();
+
+	var bboxG = _g.append('g').attr('class', 'dc-legend-bbox');
+
+	var legendables = _parent.legendables();
 
         var itemEnter = _g.selectAll('g.dc-legend-item')
             .data(legendables)
@@ -7274,6 +7287,14 @@ dc.legend = function () {
                 return 'translate(0,' + i * legendItemHeight() + ')';
             }
         });
+
+	var bbox = _g.node().getBBox();
+	bboxG.append('rect').attr('x', -2).attr('y', -2)
+	    .attr('width', bbox.width+4)
+	    .attr('height', bbox.height+4)
+	    .style('fill', 'white')
+	    .style('stroke', 'black')
+	    .style('stroke-width', '1pt');
     };
 
     function legendItemHeight() {

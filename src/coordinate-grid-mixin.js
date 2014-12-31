@@ -22,6 +22,15 @@ dc.coordinateGridMixin = function (_chart) {
     function zoomHandler () {
         _refocused = true;
         if (_zoomOutRestrict) {
+            var zxr = _zoom.x().range();
+            var zsc = _zoom.scale();
+            var zxt = _zoom.translate();
+
+            zxt[0] = Math.min(Math.max(zxt[0], -(zxr[1]*zsc - zxr[1] + 1)), 0);
+            _zoom.translate([zxt[0],zxt[1]]);
+            _zoom.scale(Math.max(1, _zoom.scale()));
+            _chart.x().domain(_zoom.x().domain());
+
             _chart.x().domain(constrainRange(_chart.x().domain(), _xOriginalDomain));
             if (_rangeChart) {
                 _chart.x().domain(constrainRange(_chart.x().domain(), _rangeChart.x().domain()));

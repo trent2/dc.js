@@ -112,12 +112,12 @@ dc.legend = function () {
         });
 
 	var bbox = _g.node().getBBox();
-	bboxG.append('rect').attr("x", -2).attr("y", -2)
-	    .attr("width", bbox.width+4)
-	    .attr("height", bbox.height+4)
-	    .style("fill", "white")
-	    .style("stroke", "black")
-	    .style("stroke-width", "1pt");
+	bboxG.append('rect').attr('x', -2).attr('y', -2)
+	    .attr('width', bbox.width+4)
+	    .attr('height', bbox.height+4)
+	    .style('fill', 'white')
+	    .style('stroke', 'black')
+	    .style('stroke-width', '1pt');
     };
 
     function legendItemHeight() {
