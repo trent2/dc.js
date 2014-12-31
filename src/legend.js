@@ -41,7 +41,10 @@ dc.legend = function () {
         _g = _parent.svg().append('g')
             .attr('class', 'dc-legend')
             .attr('transform', 'translate(' + _x + ',' + _y + ')');
-        var legendables = _parent.legendables();
+
+	var bboxG = _g.append('g').attr('class', 'dc-legend-bbox');
+
+	var legendables = _parent.legendables();
 
         var itemEnter = _g.selectAll('g.dc-legend-item')
             .data(legendables)
@@ -107,6 +110,14 @@ dc.legend = function () {
                 return 'translate(0,' + i * legendItemHeight() + ')';
             }
         });
+
+	var bbox = _g.node().getBBox();
+	bboxG.append('rect').attr("x", -2).attr("y", -2)
+	    .attr("width", bbox.width+4)
+	    .attr("height", bbox.height+4)
+	    .style("fill", "white")
+	    .style("stroke", "black")
+	    .style("stroke-width", "1pt");
     };
 
     function legendItemHeight() {

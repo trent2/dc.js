@@ -227,6 +227,12 @@ div.dc-chart {
     cursor: pointer;
 }
 
+.dc-legend-bbox {
+    fill: white;
+    stroke: black;
+    stroke-width: 1px;
+}
+
 .dc-chart g.axis text {
     /* Makes it so the user can't accidentally click and select text that is meant as a label only */
     -webkit-user-select: none; /* Chrome/Safari */
